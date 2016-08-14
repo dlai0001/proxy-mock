@@ -8,7 +8,7 @@ var express = require('express');
 var fs = fs || require('fs');
 
 var app = express();
-var mock_modules = {}; //store object with our mock middleware.
+var mockModules = {}; //store object with our mock middleware.
 
 // Register Mock Middleware modules
 console.log("Registering middleware mock modules.");
@@ -18,13 +18,18 @@ files.forEach(function(item) {
 	moduleName = item.slice(0, -3);
 	console.log("loading ", moduleName, "...");
 	var mock_middleware = require(mockModulePath + moduleName);	
-	mock_modules[moduleName] = mock_middleware;
-	mock_middleware.register(app);	
+	mockModules[moduleName] = new mock_middleware();
+	mockModules[moduleName].register(app);	
 });
+
+// Setting up our webadmin
+app.use("/_admin", express.static('admin-web'));
+var AdminApi = require("./admin-api");
+var adminApiInstance = new AdminApi(mockModules);
+app.use("/_adminapi", adminApiInstance.router);
 
 // Setting up our proxy
 var proxy = require('http-proxy-middleware');
-
 var options = {
         target: proxyToAddress, // target host
         changeOrigin: true,               // needed for virtual hosted sites
@@ -36,7 +41,6 @@ var options = {
             proxyToAddress : 'http://localhost:'+ servicePort
         }
     };
-// create the proxy (without context)
 var proxyInstance = proxy(options);
 app.use(proxyInstance);
 
