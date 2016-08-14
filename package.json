@@ -1,0 +1,16 @@
+{
+  "name": "proxy-mock",
+  "version": "1.0.0",
+  "description": "Mock some backend requests while proxying others.  Proxy mock allows you to create middle ware to handle certain requests, while allowing others to proxy through to a regular backend system.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Lai",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.14.0",
+    "http-proxy-middleware": "^0.17.1"
+  }
+}
