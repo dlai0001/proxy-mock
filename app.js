@@ -11,12 +11,13 @@ var app = express();
 var mock_modules = {}; //store object with our mock middleware.
 
 // Register Mock Middleware modules
-console.log("Registering middleware mock modules.")
-files = fs.readdirSync("./mock_modules");
+console.log("Registering middleware mock modules.");
+const mockModulePath = "./mock-modules/";
+files = fs.readdirSync(mockModulePath);
 files.forEach(function(item) {
 	moduleName = item.slice(0, -3);
 	console.log("loading ", moduleName, "...");
-	var mock_middleware = require("./mock_modules/" + moduleName);	
+	var mock_middleware = require(mockModulePath + moduleName);	
 	mock_modules[moduleName] = mock_middleware;
 	mock_middleware.register(app);	
 });
